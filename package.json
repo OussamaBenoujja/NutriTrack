@@ -1,0 +1,29 @@
+{
+  "name": "nutritrack",
+  "version": "0.0.1",
+  "description": "this is an application to track diet and calories using VLMs by processing food intake routine and diet ",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OussamaBenoujja/NutriTrack.git"
+  },
+  "keywords": [
+    "deit",
+    "VLM",
+    "image-to-text"
+  ],
+  "author": "OussamaBenoujja-ZbidaYassir-HamzaAtig",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/OussamaBenoujja/NutriTrack/issues"
+  },
+  "homepage": "https://github.com/OussamaBenoujja/NutriTrack#readme",
+  "dependencies": {
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "mysql2": "^3.15.0"
+  }
+}

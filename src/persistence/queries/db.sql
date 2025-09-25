@@ -1,14 +1,8 @@
--- Active: 1758639447092@@127.0.0.1@3306@mysql
+-- Active: 1758796632857@@localhost@3306@mysql
 CREATE DATABASE IF NOT EXISTS NutriTrackDB;
 USE NutriTrackDB;
 
 -- Tables
-CREATE TABLE IF NOT EXISTS `user_profiles` (
-    `profile_id` INT NOT NULL AUTO_INCREMENT,
-    `profile_name` VARCHAR(100) NOT NULL COMMENT '"Diabète", "Athlète", "Perte de poids"',
-    `description` TEXT NULL,
-    PRIMARY KEY (`profile_id`)
-) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `users` (
     `user_id` INT NOT NULL AUTO_INCREMENT,
@@ -20,17 +14,12 @@ CREATE TABLE IF NOT EXISTS `users` (
     `weight` DECIMAL(5,2) NULL COMMENT 'ex: 75.50 kg',
     `height` INT NULL COMMENT 'en cm',
     `activity_level` VARCHAR(50) NULL COMMENT 'ex: \'sedentary\', \'moderate\', \'active\'',
-    `profile_id` INT NULL,
     `health_conditions` VARCHAR(500) NULL COMMENT 'Any health problems or conditions',
+    `profile_type` VARCHAR(100) NOT NULL COMMENT '"Diabète", "Athlète", "Perte de poids"',
+    `description` TEXT NULL,
     `creation_date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`user_id`),
-    UNIQUE INDEX `email_UNIQUE` (`email` ASC),
-    INDEX `fk_users_user_profiles_idx` (`profile_id` ASC),
-    CONSTRAINT `fk_users_user_profiles`
-        FOREIGN KEY (`profile_id`)
-        REFERENCES `user_profiles` (`profile_id`)
-        ON DELETE SET NULL
-        ON UPDATE NO ACTION
+    UNIQUE INDEX `email_UNIQUE` (`email` ASC)
 ) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `nutrition_plans` (
@@ -87,10 +76,8 @@ CREATE TABLE IF NOT EXISTS `weekly_reports` (
         ON UPDATE NO ACTION
 ) ENGINE = InnoDB;
 
-
 -- Drop tables
 DROP TABLE IF EXISTS weekly_reports;
 DROP TABLE IF EXISTS recommendations;
 DROP TABLE IF EXISTS nutrition_plans;
 DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS user_profiles;

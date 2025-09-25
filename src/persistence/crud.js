@@ -93,4 +93,29 @@ crud.getActivePlanByUserId = async (userId) => {
     return rows[0] || null;
 };
 
+//recommendation CRUD operations
+crud.createRecommendation = async (recoData) => {
+    const sql = `INSERT INTO recommendations (user_id, content, type) VALUES (?, ?, ?)`;
+    const values = [
+        recoData.user_id,
+        recoData.content,
+        recoData.type
+    ];
+    const [result] = await pool.query(sql, values);
+    return result.insertId;
+};
+
+crud.getRecommendationsByUserId = async (userId) => {
+    const sql = `SELECT * FROM recommendations WHERE user_id = ? ORDER BY created_at DESC`;
+    const [rows] = await pool.query(sql, [userId]);
+    return rows;
+};
+
+crud.markRecommendationAsRead = async (recommendationId) => {
+    const sql = `UPDATE recommendations SET is_read = 1 WHERE recommendation_id = ?`;
+    const [result] = await pool.query(sql, [recommendationId]);
+    return result.affectedRows;
+};
+
+
 module.exports = crud;

@@ -12,14 +12,15 @@ const pool = mysql.createPool({
 });
 
 // Test the database connection
-// pool.getConnection()
-//   .then(conn => {
-//     console.log('Database connection successful.');
-//     conn.release();
-//   })
-//   .catch(err => {
-//     console.error('Database connection failed:', err.message);
-//     process.exit(1);
-//   });
+pool.getConnection()
+  .then(conn => {
+    console.log('Database connection successful.');
+    conn.release();
+  })
+  .catch(err => {
+    console.error('Database connection failed:', err.message);
+    console.error('Please check your database configuration in .env file');
+    // Don't exit process, just log the error
+  });
 
 module.exports = pool;

@@ -1,0 +1,107 @@
+<!-- Error Message -->
+<% if (typeof error !== 'undefined' && error) { %>
+    <div class="mb-6 p-2 bg-red-50 border border-red-200 justify-center rounded-lg flex items-center">
+        <i class="ri-error-warning-line text-red-500 text-xl mr-3 mt-0.5"></i>
+        <p class="text-red-500 text-sm"><%= error %></p>
+    </div>
+    <% } %>
+    
+    <!-- Success Message -->
+    <% if (typeof success !== 'undefined' && success) { %>
+    <div class="mb-4 p-2 bg-green-50 border border-green-200 rounded-lg flex items-start">
+        <i class="ri-checkbox-circle-line text-green-500 text-xl mr-3 mt-0.5"></i>
+        <p class="text-green-700 text-sm"><%= success %></p>
+    </div>
+    <% } %>
+    
+    <!-- Login Form -->
+    <form action="/auth/login" method="POST" class="space-y-5">
+        <!-- Email Field -->
+        <div>
+            <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="ri-mail-line text-gray-400"></i>
+                </div>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    class="input-focus w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-400 transition-all"
+                    placeholder="user@nutripack.com"
+                    value="<%= typeof email !== 'undefined' ? email : '' %>"
+                    required
+                >
+            </div>
+        </div>
+        
+        <!-- Password Field -->
+        <div>
+            <label for="password" class="block text-sm font-semibold text-gray-700 mb-2">Password</label>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="ri-lock-line text-gray-400"></i>
+                </div>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    class="input-focus w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-400 transition-all"
+                    placeholder="••••••••"
+                    required
+                >
+                <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                    <i class="ri-eye-off-line text-gray-400 password-toggle" onclick="togglePassword()"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Remember Me & Forgot Password -->
+        <div class="flex items-center justify-between">
+            <label class="flex items-center">
+                <input type="checkbox" name="remember" class="w-4 h-4 text-persian-green border-gray-300 rounded focus:ring-persian-green">
+                <span class="ml-2 text-sm text-gray-600">Remember Me</span>
+            </label>
+            <a href="/auth/forgot-password" class="text-sm font-semibold text-persian-green hover:text-persian-green-dark transition-colors">
+                Forgot Your Password?
+            </a>
+        </div>
+        
+        <!-- Submit Button -->
+        <button 
+            type="submit" 
+            class="btn-primary w-full py-3 text-white font-semibold rounded-lg"
+        >
+            Log In
+        </button>
+    </form>
+    
+    <!-- Divider -->
+    <div class="relative my-6 hidden">
+        <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-300"></div>
+        </div>
+        <div class="relative flex justify-center text-sm">
+            <span class="px-4 bg-gray-50 text-gray-500">Or Login With</span>
+        </div>
+    </div>
+    
+    <!-- Social Login -->
+    <div class="grid grid-cols-2 gap-4 hidden">
+        <button type="button" class="social-btn flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg bg-white hover:bg-gray-50">
+            <i class="ri-google-fill text-red-500 text-xl mr-2"></i>
+            <span class="text-gray-700 font-medium">Google</span>
+        </button>
+        <button type="button" class="social-btn flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg bg-white hover:bg-gray-50">
+            <i class="ri-apple-fill text-gray-800 text-xl mr-2"></i>
+            <span class="text-gray-700 font-medium">Apple</span>
+        </button>
+    </div>
+    
+    <!-- Register Link -->
+    <p class="mt-8 text-center text-gray-600">
+        Don't Have An Account? 
+        <a href="/auth/register" class="font-semibold text-persian-green hover:text-persian-green-dark transition-colors">
+            Register Now
+        </a>
+    </p>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title || 'NutriTrack - Authentication' %></title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/svg+xml" href="/favicon-site.svg">
+    
+    <!-- Remix Icon -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'persian-green': '#009688',
+                        'persian-green-light': '#4CB5AB',
+                        'persian-green-dark': '#00786C',
+                    },
+                    fontFamily: {
+                        'manrope': ['Manrope', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+        
+        .password-toggle {
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .input-focus:focus {
+            outline: none;
+            border-color: #009688;
+            box-shadow: 0 0 0 3px rgba(0, 150, 136, 0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #009688 0%, #00786C 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 150, 136, 0.3);
+        }
+        
+        .social-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .social-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-4px);
+        }
+
+        .quote-icon {
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 1023px) {
+            .right-panel {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50">
+    <div class="flex min-h-screen">
+        <!-- Left Side - Form Content -->
+        <div class="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-6 lg:p-12">
+            <div class="w-full max-w-md">
+                <!-- Logo -->
+                <a href="/" class="mb-6 sm:mb-8 flex justify-center md:inline-block mb-6 sm:mb-8">
+                    <div class="flex items-center">
+                        <img src="/images/logo.svg" alt="NutriTrack Logo" class="h-14 sm:h-14">
+                    </div>
+                </a>
+                
+                <!-- Header -->
+                <div class="mb-6 sm:mb-8">
+                    <h1 class="text-2xl text-center md:text-left sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-2"><%= pageTitle || 'Welcome' %></h1>
+                    <p class="text-sm sm:text-base text-gray-600 text-center md:text-left"><%= pageSubtitle || 'Please enter your details to continue.' %></p>
+                </div>
+                
+                <!-- Main Content Area -->
+                <%- body %>
+                
+                
+            </div>
+        </div>
+        
+        <!-- Right Side - Background Image with Quote -->
+        <div class="right-panel hidden lg:flex lg:w-1/2 items-center bg-[url('/images/auth.webp')] h-screen w-full bg-cover bg-center justify-center p-12 relative rounded-tl-[2.5rem] rounded-bl-[2.5rem]
+        overflow-hidden">
+            <!-- Dark Overlay -->
+            <div class="absolute inset-0 bg-black/40"></div>
+            
+            <!-- Decorative Elements -->
+            <div class="absolute top-20 right-20 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-20 left-20 w-96 h-96 bg-white opacity-10 rounded-full blur-3xl"></div>
+            
+            <div class="relative z-10 text-white max-w-lg text-center">
+                <i class="ri-double-quotes-l text-6xl opacity-50 mb-6"></i>
+                <h2 class="text-4xl lg:text-4xl font-bold mb-6 leading-tight">
+                    "Good nutrition is the foundation of a healthy life"
+                </h2>
+                <p class="text-lg text-white/90 mb-8">
+                    Track your eating habits and achieve your goals with NutriTrack
+                </p>
+                <div class="flex items-center justify-center space-x-8 mt-8">
+                    <div class="text-center">
+                        <i class="ri-camera-lens-line text-3xl mb-2"></i>
+                        <p class="text-sm opacity-90">AI Analysis</p>
+                    </div>
+                    <div class="text-center">
+                        <i class="ri-heart-pulse-line text-3xl mb-2"></i>
+                        <p class="text-sm opacity-90">Health Tracking</p>
+                    </div>
+                    <div class="text-center">
+                        <i class="ri-line-chart-line text-3xl mb-2"></i>
+                        <p class="text-sm opacity-90">Statistics</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function togglePassword(inputId = 'password') {
+            const passwordInput = document.getElementById(inputId);
+            const toggleIcon = passwordInput.parentElement.querySelector('.password-toggle');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('ri-eye-off-line');
+                toggleIcon.classList.add('ri-eye-line');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('ri-eye-line');
+                toggleIcon.classList.add('ri-eye-off-line');
+            }
+        }
+    </script>
+    
+    <!-- Additional Scripts -->
+    <%- typeof scripts !== 'undefined' ? scripts : '' %>
+</body>
+</html>

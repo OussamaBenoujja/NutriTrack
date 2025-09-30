@@ -76,6 +76,32 @@ CREATE TABLE IF NOT EXISTS `weekly_reports` (
         ON UPDATE NO ACTION
 ) ENGINE = InnoDB;
 
+
+CREATE TABLE IF NOT EXISTS `meals` (
+  `meal_id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `eaten_at` DATETIME NOT NULL,
+  `source` ENUM('image','manual') NOT NULL,
+  `calories` DECIMAL(10,2) NULL,
+  `protein` DECIMAL(10,2) NULL,
+  `carbs` DECIMAL(10,2) NULL,
+  `fats` DECIMAL(10,2) NULL,
+  `sodium` DECIMAL(10,2) NULL COMMENT 'mg',
+  `sugar` DECIMAL(10,2) NULL COMMENT 'g',
+  `gi_estimate` INT NULL,
+  `photo_path` VARCHAR(500) NULL,
+  `analysis_json` JSON NULL,
+  `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`meal_id`),
+  INDEX `idx_meals_user_date` (`user_id`, `eaten_at`),
+  CONSTRAINT `fk_meals_users`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `users` (`user_id`)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION
+) ENGINE=InnoDB;
+
+
 -- Drop tables
 DROP TABLE IF EXISTS weekly_reports;
 DROP TABLE IF EXISTS recommendations;

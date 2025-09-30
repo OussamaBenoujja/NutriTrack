@@ -118,4 +118,93 @@ crud.markRecommendationAsRead = async (recommendationId) => {
 };
 
 
+crud.getAllUsers = async () => {
+  const sql = `SELECT * FROM users ORDER BY user_id DESC`;
+  const [rows] = await pool.query(sql);
+  return rows;
+};
+
+crud.createMeal = async (meal) => {
+  const sql = `
+    INSERT INTO meals (
+      user_id, eaten_at, source, calories, protein, carbs, fats,
+      sodium, sugar, gi_estimate, photo_path, analysis_json
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+  const values = [
+    meal.user_id,
+    meal.eaten_at,          // 'YYYY-MM-DD HH:MM:SS'
+    meal.source,            // 'image' | 'manual'
+    meal.calories ?? null,
+    meal.protein ?? null,
+    meal.carbs ?? null,
+    meal.fats ?? null,
+    meal.sodium ?? null,
+    meal.sugar ?? null,
+    meal.gi_estimate ?? null,
+    meal.photo_path ?? null,
+    meal.analysis_json ?? null, // JSON string if using mysql2
+  ];
+  const [result] = await pool.query(sql, values);
+  return result.insertId;
+};
+
+crud.getMealById = async (mealId) => {
+  const sql = `SELECT * FROM meals WHERE meal_id = ?`;
+  const [rows] = await pool.query(sql, [mealId]);
+  return rows[0] || null;
+};
+
+crud.getMealsByUserId = async (userId, limit = 50, offset = 0) => {
+  const sql = `
+    SELECT * FROM meals
+    WHERE user_id = ?
+    ORDER BY eaten_at DESC
+    LIMIT ? OFFSET ?
+  `;
+  const [rows] = await pool.query(sql, [userId, Number(limit), Number(offset)]);
+  return rows;
+};
+
+crud.getMealsByDateRange = async (userId, startDate, endDate) => {
+  const sql = `
+    SELECT * FROM meals
+    WHERE user_id = ?
+      AND eaten_at >= ?
+      AND eaten_at < DATE_ADD(?, INTERVAL 1 DAY)
+    ORDER BY eaten_at ASC
+  `;
+  const [rows] = await pool.query(sql, [userId, startDate, endDate]);
+  return rows;
+};
+
+crud.updateMeal = async (mealId, fields) => {
+  const allowed = [
+    'eaten_at','source','calories','protein','carbs','fats',
+    'sodium','sugar','gi_estimate','photo_path','analysis_json'
+  ];
+  const set = [];
+  const vals = [];
+  for (const k of allowed) {
+    if (Object.prototype.hasOwnProperty.call(fields, k)) {
+      set.push(`${k} = ?`);
+      vals.push(fields[k]);
+    }
+  }
+  if (set.length === 0) return 0;
+  const sql = `UPDATE meals SET ${set.join(', ')} WHERE meal_id = ?`;
+  vals.push(mealId);
+  const [res] = await pool.query(sql, vals);
+  return res.affectedRows;
+};
+
+crud.deleteMeal = async (mealId, userId) => {
+  const sql = `DELETE FROM meals WHERE meal_id = ? AND user_id = ?`;
+  const [res] = await pool.query(sql, [mealId, userId]);
+  return res.affectedRows;
+};
+
+
+
+
 module.exports = crud;

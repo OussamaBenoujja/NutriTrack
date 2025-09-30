@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Sign up</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; margin: 2rem; }
+    .card { max-width: 640px; margin: 0 auto; padding: 1.5rem; border: 1px solid #e5e7eb; border-radius: 8px; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+    .field { margin-bottom: 1rem; display: flex; flex-direction: column; }
+    label { font-size: 0.9rem; margin-bottom: 0.35rem; }
+    input, select, textarea { padding: 0.6rem 0.7rem; border: 1px solid #cbd5e1; border-radius: 6px; }
+    .error { color: #b91c1c; background: #fee2e2; border: 1px solid #fecaca; padding: 0.75rem; border-radius: 6px; margin-bottom: 1rem; }
+    .actions { display: flex; gap: 0.75rem; align-items: center; margin-top: 0.5rem; }
+    button { padding: 0.6rem 0.9rem; border: 0; background: #111827; color: #fff; border-radius: 6px; cursor: pointer; }
+    a { color: #2563eb; text-decoration: none; }
+    @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Create account</h2>
+
+    <% if (typeof error !== 'undefined' && error) { %>
+      <div class="error"><%= error %></div>
+    <% } %>
+
+    <form action="/auth/signup" method="POST" novalidate>
+      <div class="grid">
+        <div class="field">
+          <label for="first_name">First name</label>
+          <input id="first_name" name="first_name" required
+            value="<%= (values && values.first_name) ? values.first_name : '' %>" />
+        </div>
+
+        <div class="field">
+          <label for="last_name">Last name</label>
+          <input id="last_name" name="last_name" required
+            value="<%= (values && values.last_name) ? values.last_name : '' %>" />
+        </div>
+
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" required
+            value="<%= (values && values.email) ? values.email : '' %>" />
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" autocomplete="new-password" required />
+        </div>
+
+        <div class="field">
+          <label for="birth_date">Birth date</label>
+          <input id="birth_date" name="birth_date" type="date"
+            value="<%= (values && values.birth_date) ? values.birth_date : '' %>" />
+        </div>
+
+        <div class="field">
+          <label for="weight">Weight</label>
+          <input id="weight" name="weight" type="number" step="0.1"
+            value="<%= (values && values.weight) ? values.weight : '' %>" />
+        </div>
+
+        <div class="field">
+          <label for="height">Height</label>
+          <input id="height" name="height" type="number" step="0.1"
+            value="<%= (values && values.height) ? values.height : '' %>" />
+        </div>
+
+        <div class="field">
+          <label for="activity_level">Activity level</label>
+          <select id="activity_level" name="activity_level">
+            <option value="" <%= (!values || !values.activity_level) ? 'selected' : '' %> >Select</option>
+            <option value="sedentary" <%= (values && values.activity_level === 'sedentary') ? 'selected' : '' %> >Sedentary</option>
+            <option value="light" <%= (values && values.activity_level === 'light') ? 'selected' : '' %> >Light</option>
+            <option value="moderate" <%= (values && values.activity_level === 'moderate') ? 'selected' : '' %> >Moderate</option>
+            <option value="active" <%= (values && values.activity_level === 'active') ? 'selected' : '' %> >Active</option>
+            <option value="very_active" <%= (values && values.activity_level === 'very_active') ? 'selected' : '' %> >Very active</option>
+          </select>
+        </div>
+
+        <div class="field" style="grid-column: 1 / -1;">
+          <label for="health_conditions">Health conditions</label>
+          <input id="health_conditions" name="health_conditions"
+            value="<%= (values && values.health_conditions) ? values.health_conditions : '' %>" />
+        </div>
+
+        <div class="field">
+          <label for="profile_type">Profile type</label>
+          <input id="profile_type" name="profile_type"
+            value="<%= (values && values.profile_type) ? values.profile_type : '' %>" />
+        </div>
+
+        <div class="field" style="grid-column: 1 / -1;">
+          <label for="description">Description</label>
+          <textarea id="description" name="description" rows="3"><%= (values && values.description) ? values.description : '' %></textarea>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="submit">Create account</button>
+        <a href="/auth/login">Already have an account?</a>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

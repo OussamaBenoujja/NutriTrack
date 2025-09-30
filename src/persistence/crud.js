@@ -124,6 +124,7 @@ crud.getAllUsers = async () => {
   return rows;
 };
 
+//meal CRUD operations (by oussama)
 crud.createMeal = async (meal) => {
   const sql = `
     INSERT INTO meals (
@@ -204,7 +205,32 @@ crud.deleteMeal = async (mealId, userId) => {
   return res.affectedRows;
 };
 
+// End of meal CRUD operations (by oussama)
 
+// weekly_reports CRUD operations
+crud.createWeeklyReport = async (reportData) => {
+    const sql = `
+    INSERT INTO weekly_reports (
+        user_id, week_start_date, week_end_date, nutritional_summary, weight_evolution, performance_notes
+    ) VALUES (?, ?, ?, ?, ?, ?)
+    `;
+    const values = [
+        reportData.user_id,
+        reportData.week_start_date,
+        reportData.week_end_date,
+        reportData.nutritional_summary ?? null,
+        reportData.weight_evolution ?? null,
+        reportData.performance_notes ?? null
+    ];
+    const [result] = await pool.query(sql, values);
+    return result.insertId;
+};
+
+crud.getWeeklyReportsByUserId = async (userId) => {
+    const sql = `SELECT * FROM weekly_reports WHERE user_id = ? ORDER BY week_start_date DESC`;
+    const [rows] = await pool.query(sql, [userId]);
+    return rows;
+};
 
 
 module.exports = crud;

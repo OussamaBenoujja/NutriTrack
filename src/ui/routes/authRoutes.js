@@ -5,16 +5,28 @@ const authService = require('../../services/authService');
 
 
 //SignUp 
-router.get('/signup', (req, res) => {
-  res.render('signup', { error: null, values: {} });
+router.get('/register', (req, res) => {
+  res.render('auth/register', { 
+    title: 'Register - NutriTrack',
+    pageTitle: 'Create Your Account',
+    pageSubtitle: 'Join NutriTrack and start your healthy journey today.',
+    error: null, 
+    values: {} 
+  });
 });
 
 
-router.post('/signup', async (req, res) => {
+router.post('/register', async (req, res) => {
   const { first_name, last_name, email, password, birth_date, weight, height, activity_level, health_conditions, profile_type, description } = req.body;
 
   if (!first_name || !last_name || !email || !password) {
-    return res.status(400).render('signup', { error: 'Missing required fields', values: req.body });
+    return res.status(400).render('auth/register', { 
+      title: 'Register - NutriTrack',
+      pageTitle: 'Create Your Account',
+      pageSubtitle: 'Join NutriTrack and start your healthy journey today.',
+      error: 'Missing required fields', 
+      values: req.body 
+    });
   }
 
   try {
@@ -35,8 +47,14 @@ router.post('/signup', async (req, res) => {
     req.session.user = user;
     return res.redirect('/dashboard');
   } catch (err) {
-    const msg = err.code === 'EMAIL_EXISTS' ? 'Email already in use' : 'Signup failed';
-    return res.status(400).render('signup', { error: msg, values: req.body });
+    const msg = err.code === 'EMAIL_EXISTS' ? 'Email already in use' : 'Registration failed';
+    return res.status(400).render('auth/register', { 
+      title: 'Register - NutriTrack',
+      pageTitle: 'Create Your Account',
+      pageSubtitle: 'Join NutriTrack and start your healthy journey today.',
+      error: msg, 
+      values: req.body 
+    });
   }
 });
 
@@ -44,7 +62,12 @@ router.post('/signup', async (req, res) => {
 
 //Login
 router.get('/login', (req, res) => {
-  res.render('login', { error: null });
+  res.render('auth/login', { 
+    title: 'Login - NutriTrack',
+    pageTitle: 'Welcome Back',
+    pageSubtitle: 'Sign in to your account to continue.',
+    error: null 
+  });
 });
 
 
@@ -52,7 +75,12 @@ router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).render('login', { error: 'Email and password are required' });
+    return res.status(400).render('auth/login', { 
+      title: 'Login - NutriTrack',
+      pageTitle: 'Welcome Back',
+      pageSubtitle: 'Sign in to your account to continue.',
+      error: 'Email and password are required' 
+    });
   }
 
   try {
@@ -63,7 +91,12 @@ router.post('/login', async (req, res) => {
     const msg = err.code === 'USER_NOT_FOUND' || err.code === 'INVALID_PASSWORD'
       ? 'Invalid email or password'
       : 'Login failed';
-    return res.status(401).render('login', { error: msg });
+    return res.status(401).render('auth/login', { 
+      title: 'Login - NutriTrack',
+      pageTitle: 'Welcome Back',
+      pageSubtitle: 'Sign in to your account to continue.',
+      error: msg 
+    });
   }
 });
 

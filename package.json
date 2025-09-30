@@ -22,8 +22,12 @@
   },
   "homepage": "https://github.com/OussamaBenoujja/NutriTrack#readme",
   "dependencies": {
+    "@langchain/google-genai": "^0.2.18",
+    "bcrypt": "^6.0.0",
     "dotenv": "^17.2.2",
+    "ejs": "^3.1.10",
     "express": "^5.1.0",
+    "express-session": "^1.18.2",
     "mysql2": "^3.15.0"
   }
 }

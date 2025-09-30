@@ -107,3 +107,7 @@ DROP TABLE IF EXISTS weekly_reports;
 DROP TABLE IF EXISTS recommendations;
 DROP TABLE IF EXISTS nutrition_plans;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS meals;
+
+-- Drop database
+DROP DATABASE IF EXISTS NutriTrackDB;

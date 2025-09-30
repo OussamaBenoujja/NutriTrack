@@ -1,0 +1,30 @@
+Folder PATH listing for volume Windows-SSD
+Volume serial number is 4205-B9B8
+C:\USERS\OUSSA\DESKTOP\NUTRITRACK\SRC
+|   app.js
+|   tree_snapshot.txt
+|   
++---persistence
+|   |   crud.js
+|   |   db.js
+|   |   
+|   \---queries
+|           db.sql
+|           
++---services
+|       authService.js
+|       mealService.js
+|       recommendationService.js
+|       reportService.js
+|       
+\---ui
+    +---public
+    |       .gitkeep
+    |       
+    +---routes
+    |       .gitkeep
+    |       authRoutes.js
+    |       
+    \---views
+            .gitkeep
+            

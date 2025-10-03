@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriTrack - Meals</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/svg+xml" href="/images/favicon-site.svg">
+    
+    <!-- Remix Icon -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+    
+  <style>
+        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Manrope', sans-serif;
+            background: #f8fafc;
+        }
+        
+        .btn-primary {
+            background: #009688;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 150, 136, 0.2);
+        }
+        
+        .btn-primary:hover {
+            background: #00786C;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 150, 136, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #38bdf8;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: #0ea5e9;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(56, 189, 248, 0.4);
+        }
+        
+        .btn-warning {
+            background: #f59e0b;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);
+        }
+        
+        .btn-warning:hover {
+            background: #d97706;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.4);
+        }
+        
+        .card {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.95);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border-color: rgba(0, 150, 136, 0.2);
+        }
+        
+        .nav-link {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-link:hover {
+            background: rgba(0, 150, 136, 0.1);
+            color: #009688;
+            transform: translateY(-1px);
+        }
+        
+        .feature-icon {
+            color: #009688;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .gradient-text {
+            color: #009688;
+        }
+        
+        .stats-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            transition: all 0.4s ease;
+            
+        }
+        
+        .stats-card:hover {
+            box-shadow: 0 20px 40px rgba(0, 150, 136, 0.1);
+        }
+        
+        .meal-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+        
+        .meal-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 150, 136, 0.1);
+        }
+        
+        .nutrition-badge {
+            background: #f0fdfa;
+            border: 1px solid #5eead4;
+            color: #009688;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 12px;
+        }
+        
+        .nutrition-badge.calories { background: #fef3c7; border-color: #f59e0b; color: #92400e; }
+        .nutrition-badge.protein { background: #dbeafe; border-color: #3b82f6; color: #1e40af; }
+        .nutrition-badge.carbs { background: #fef3c7; border-color: #eab308; color: #92400e; }
+        .nutrition-badge.fats { background: #e9d5ff; border-color: #8b5cf6; color: #6b21a8; }
+        .nutrition-badge.sodium { background: #fed7aa; border-color: #f59e0b; color: #9a3412; }
+        .nutrition-badge.sugar { background: #fecaca; border-color: #ef4444; color: #dc2626; }
+        
+        .slide-in {
+            animation: slideIn 0.6s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .form-input {
+            transition: all 0.3s ease;
+            border: 1px solid #d1d5db;
+        }
+        
+        .form-input:focus {
+            border-color: #009688;
+            box-shadow: 0 0 0 3px rgba(0, 150, 136, 0.1);
+        }
+        
+        .upload-area {
+            border: 2px dashed #d1d5db;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-area:hover {
+            border-color: #009688;
+            background: rgba(0, 150, 136, 0.05);
+        }
+        
+        .upload-area.dragover {
+            border-color: #009688;
+            background: rgba(0, 150, 136, 0.1);
+        }
+        
+        .form-input:focus {
+            border-color: #009688;
+            box-shadow: none;
+            outline: none;
+        }
+        
+        .upload-area.dragover {
+            border-color: #009688;
+            background: rgba(0, 150, 136, 0.1);
+            transform: scale(1.02);
+        }
+        
+        .upload-area.dragenter {
+            border-color: #009688;
+            background: rgba(0, 150, 136, 0.05);
+        }
+        
+        .error-message {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+        
+        .success-message {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #16a34a;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+        
+        .equal-height {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .equal-height .stats-card {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .equal-height .stats-card form {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .equal-height .stats-card .space-y-6 {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+  </style>
+</head>
+<body class="min-h-screen bg-gray-50">
+    <!-- Navigation Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="/dashboard" class="flex items-center">
+                        <img src="/images/logo.svg" alt="NutriTrack Logo" class="h-36 w-36">
+                    </a>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden lg:flex items-center space-x-2">
+                    <a href="/dashboard" class="nav-link px-4 py-2 rounded-xl text-gray-700 hover:text-teal-600 font-medium flex items-center">
+                        <i class="ri-dashboard-line mr-2 text-lg"></i>Dashboard
+                    </a>
+                    <a href="/meals" class="nav-link px-4 py-2 rounded-xl text-gray-700 hover:text-teal-600 font-medium flex items-center bg-teal-50 text-teal-600">
+                        <i class="ri-restaurant-line mr-2 text-lg"></i>Meals
+                    </a>
+                    <a href="/reports/weekly" class="nav-link px-4 py-2 rounded-xl text-gray-700 hover:text-teal-600 font-medium flex items-center">
+                        <i class="ri-bar-chart-line mr-2 text-lg"></i>Reports
+                    </a>
+                    <a href="/profile" class="nav-link px-4 py-2 rounded-xl text-gray-700 hover:text-teal-600 font-medium flex items-center">
+                        <i class="ri-user-line mr-2 text-lg"></i>Profile
+                    </a>
+                </div>
+                
+                <!-- User Menu -->
+                <div class="flex items-center space-x-4">
+                    <!-- Logout -->
+                    <form action="/auth/logout" method="post" class="inline">
+                        <button type="submit" class="bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2 rounded-xl font-medium transition-all duration-200 flex items-center border border-red-200">
+                            <i class="ri-logout-box-line mr-2"></i>Logout
+                        </button>
+      </form>
+                </div>
+            </div>
+    </nav>
+  </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Flash Messages -->
+        <% if (typeof success !== 'undefined' && success) { %>
+            <div class="mb-6 bg-green-50 border border-green-200 rounded-xl p-4 flex items-center">
+                <i class="ri-check-line text-green-600 text-xl mr-3"></i>
+                <span class="text-green-800 font-medium"><%= success %></span>
+            </div>
+        <% } %>
+        
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="mb-6 bg-red-50 border border-red-200 rounded-xl p-4 flex items-center">
+                <i class="ri-error-warning-line text-red-600 text-xl mr-3"></i>
+                <span class="text-red-800 font-medium"><%= error %></span>
+            </div>
+        <% } %>
+        
+        <!-- Hero Section -->
+        <section class="mb-12 slide-in">
+            <div class="relative overflow-hidden rounded-2xl bg-teal-600 p-8 mb-8">
+                <div class="absolute inset-0 bg-black/10"></div>
+                <div class="relative z-10">
+                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+                        <div class="mb-6 lg:mb-0">
+                            <h1 class="text-4xl font-bold text-white mb-3">
+                                Track Your Meals 🍽️
+                            </h1>
+                            <p class="text-teal-100 text-lg mb-4">
+                                Log your meals with AI-powered photo analysis or manual entry
+                            </p>
+                            <div class="flex items-center text-teal-200">
+                                <i class="ri-calendar-line mr-2"></i>
+                                <span class="font-mono text-lg"><%= date %></span>
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Actions -->
+                        <div class="flex flex-wrap gap-4">
+                            <a href="/dashboard" class="btn-primary px-6 py-3 text-white font-semibold rounded-xl flex items-center shadow-lg">
+                                <i class="ri-arrow-left-line mr-2"></i>Back to Dashboard
+                            </a>
+                        </div>
+                    </div>
+      </div>
+                
+                <!-- Decorative Elements -->
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
+                <div class="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12"></div>
+      </div>
+    </section>
+
+        <!-- Main Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 equal-height">
+            <!-- Photo Analysis Card -->
+            <div class="lg:col-span-6">
+                <div class="stats-card h-[550px] rounded-2xl shadow-xl p-8 slide-in">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-teal-600 rounded-xl flex items-center justify-center mr-4 shadow-lg">
+                            <i class="ri-camera-line text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800">AI Photo Analysis</h3>
+                            <p class="text-sm text-gray-600">Upload a meal photo for automatic nutrition detection</p>
+                        </div>
+                    </div>
+                    
+                    <form id="uploadForm" action="/meals/analyze-image" method="post" enctype="multipart/form-data" class="space-y-6">
+                        <div id="uploadArea" class="upload-area rounded-xl py-[48px] text-center border-2 border-dashed border-gray-300 hover:border-teal-400 transition-all duration-300 cursor-pointer">
+                            <div class="mb-4">
+                                <i class="ri-upload-cloud-line text-4xl text-gray-400"></i>
+                            </div>
+                            <div class="mb-4">
+                                <label for="photo" class="block text-sm font-medium text-gray-700 mb-2 cursor-pointer">
+                                    Choose Meal Photo or Drag & Drop
+                                </label>
+                                <input type="file" id="photo" name="photo" accept="image/*" 
+                                       class="hidden">
+                            </div>
+                            <p class="text-xs text-gray-500 mb-2">Supports JPG, PNG, WebP (Max 10MB)</p>
+                            <p class="text-xs text-gray-400">Drag and drop your meal photo here</p>
+                            <div class="mt-4 flex items-center justify-center space-x-4 text-xs text-gray-400">
+                                <div class="flex items-center">
+                                    <i class="ri-image-line mr-1"></i>
+                                    <span>High quality</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="ri-shield-check-line mr-1"></i>
+                                    <span>Secure upload</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="ri-magic-line mr-1"></i>
+                                    <span>AI analysis</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Image Preview -->
+                        <div id="imagePreview" class="hidden">
+                            <div class="bg-gray-50 rounded-xl p-4 border">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-medium text-gray-700">Selected Image:</span>
+                                    <button type="button" id="removeImage" class="text-red-500 hover:text-red-700">
+                                        <i class="ri-close-line"></i>
+                                    </button>
+                                </div>
+                                <img id="previewImg" src="" alt="Preview" class="w-full h-48 object-cover rounded-lg">
+                                <div class="mt-2 text-xs text-gray-500" id="fileInfo"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Upload Progress -->
+                        <div id="uploadProgress" class="hidden">
+                            <div class="bg-teal-50 border border-teal-200 rounded-xl p-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-medium text-teal-700">Analyzing image...</span>
+                                    <div class="flex items-center">
+                                        <div class="animate-spin rounded-full h-4 w-4 border-2 border-teal-600 border-t-transparent mr-2"></div>
+                                        <span class="text-xs text-teal-600" id="progressText">Processing</span>
+                                    </div>
+                                </div>
+                                <div class="w-full bg-teal-200 rounded-full h-2">
+                                    <div class="bg-teal-600 h-2 rounded-full transition-all duration-300" id="progressBar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" id="submitBtn" class="w-full btn-primary px-6 py-3 text-white font-semibold rounded-xl flex items-center justify-center shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
+                            <i class="ri-magic-line mr-2"></i>Analyze & Save Meal
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Manual Entry Card -->
+            <div class="lg:col-span-6">
+                <div class="stats-card h-[550px] rounded-2xl shadow-xl p-8 slide-in">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mr-4 shadow-lg">
+                            <i class="ri-edit-line text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800">Manual Entry</h3>
+                            <p class="text-sm text-gray-600">Add meal details manually with precise values</p>
+                        </div>
+                    </div>
+                    
+                    <form action="/meals/create-manual" method="post" class="space-y-6">
+                        <!-- Primary Nutrients -->
+                        <div class="grid grid-cols-2 gap-4">
+            <div class="form-group">
+                                <label for="calories" class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class="ri-flame-line mr-1"></i>Calories
+                                </label>
+                                <input type="number" id="calories" name="calories" step="0.1" min="0" 
+                                       class="form-input w-full p-3 rounded-lg border border-gray-300"
+                                       placeholder="0">
+            </div>
+            <div class="form-group">
+                                <label for="protein" class="block text-sm font-medium text-gray-700 mb-2">
+                                  <i class="ri-service-bell-line mr-1"></i>Protein (g)
+                                </label>
+                                <input type="number" id="protein" name="protein" step="0.1" min="0" 
+                                       class="form-input w-full p-3 rounded-lg border border-gray-300"
+                                       placeholder="0">
+            </div>
+          </div>
+                        
+                        <!-- Secondary Nutrients -->
+                        <div class="grid grid-cols-2 gap-4">
+            <div class="form-group">
+                                <label for="carbs" class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class="ri-leaf-line mr-1"></i>
+                                    Carbs (g)
+                                </label>
+                                <input type="number" id="carbs" name="carbs" step="0.1" min="0" 
+                                       class="form-input w-full p-3 rounded-lg border border-gray-300"
+                                       placeholder="0">
+            </div>
+            <div class="form-group">
+                                <label for="fats" class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class="ri-drop-line mr-1"></i>Fats (g)
+                                </label>
+                                <input type="number" id="fats" name="fats" step="0.1" min="0" 
+                                       class="form-input w-full p-3 rounded-lg border border-gray-300"
+                                       placeholder="0">
+            </div>
+          </div>
+                        
+                        <!-- Limits -->
+                        <div class="grid grid-cols-2 gap-4">
+            <div class="form-group">
+                                <label for="sodium" class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class="ri-flask-line mr-1"></i>Sodium (mg)
+                                </label>
+                                <input type="number" id="sodium" name="sodium" step="0.1" min="0" 
+                                       class="form-input w-full p-3 rounded-lg border border-gray-300"
+                                       placeholder="0">
+            </div>
+            <div class="form-group">
+                                <label for="sugar" class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class="ri-cake-line mr-1"></i>Sugar (g)
+                                </label>
+                                <input type="number" id="sugar" name="sugar" step="0.1" min="0" 
+                                       class="form-input w-full p-3 rounded-lg border border-gray-300"
+                                       placeholder="0">
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="w-full btn-secondary px-6 py-3 text-white font-semibold rounded-xl flex items-center justify-center shadow-lg">
+                            <i class="ri-save-line mr-2"></i>Save Meal
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Today's Meals -->
+            <div class="lg:col-span-12">
+                <div class="stats-card rounded-2xl shadow-xl p-8 slide-in">
+                    <div class="flex items-center justify-between mb-8">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center mr-4 shadow-lg">
+                                <i class="ri-restaurant-line text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800">Today's Meals</h3>
+                                <p class="text-sm text-gray-600">Logged entries for <%= date %></p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                            <span class="text-sm text-gray-600">Active</span>
+            </div>
+          </div>
+
+                    <div class="space-y-6">
+          <% if (Array.isArray(meals) && meals.length) { %>
+                            <% meals.forEach(function(m, index){ %>
+                                <div class="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden">
+                                    <!-- Meal Header -->
+                                    <div class="px-6 py-4 border-b border-gray-100">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
+                                                    <% if (m.source === 'ai_analysis') { %>
+                                                        <i class="ri-camera-line text-teal-600 text-lg"></i>
+                                                    <% } else { %>
+                                                        <i class="ri-edit-line text-teal-600 text-lg"></i>
+                                                    <% } %>
+                                                </div>
+                                                <div>
+                                                    <h4 class="font-semibold text-gray-800">
+                                                        <% if (m.source === 'ai_analysis') { %>
+                                                            AI Analyzed Meal
+                                                        <% } else { %>
+                                                            Manual Entry
+                                                        <% } %>
+                                                    </h4>
+                    <% if (m.eaten_at) { %>
+                                                        <p class="text-sm text-gray-600">
+                                                            <i class="ri-time-line mr-1"></i>
+                                                            <%= new Date(m.eaten_at).toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit'}) %>
+                                                        </p>
+                    <% } %>
+                  </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <div class="text-2xl font-bold text-teal-600">
+                                                    <%= Math.round(m.calories || 0) %>
+                                                </div>
+                                                <div class="text-xs text-gray-500">calories</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Nutrition Details -->
+                                    <div class="p-6">
+                                        <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
+                                            <div class="bg-blue-50 rounded-xl p-4 text-center border border-blue-200">
+                                                <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+                                                    <i class="ri-service-bell-line text-blue-600 text-lg"></i>
+                                                </div>
+                                                <div class="text-lg font-bold text-blue-900"><%= Math.round(m.protein || 0) %></div>
+                                                <div class="text-xs text-blue-600">Protein (g)</div>
+                                            </div>
+                                            
+                                            <div class="bg-yellow-50 rounded-xl p-4 text-center border border-yellow-200">
+                                                <div class="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+                                                    <i class="ri-bread-line text-yellow-600 text-lg"></i>
+                                                </div>
+                                                <div class="text-lg font-bold text-yellow-900"><%= Math.round(m.carbs || 0) %></div>
+                                                <div class="text-xs text-yellow-600">Carbs (g)</div>
+                                            </div>
+                                            
+                                            <div class="bg-purple-50 rounded-xl p-4 text-center border border-purple-200">
+                                                <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+                                                    <i class="ri-drop-line text-purple-600 text-lg"></i>
+                                                </div>
+                                                <div class="text-lg font-bold text-purple-900"><%= Math.round(m.fats || 0) %></div>
+                                                <div class="text-xs text-purple-600">Fats (g)</div>
+                                            </div>
+                                            
+                                            <div class="bg-orange-50 rounded-xl p-4 text-center border border-orange-200">
+                                                <div class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+                                                    <i class="ri-flask-line text-orange-600 text-lg"></i>
+                                                </div>
+                                                <div class="text-lg font-bold text-orange-900"><%= Math.round(m.sodium || 0) %></div>
+                                                <div class="text-xs text-orange-600">Sodium (mg)</div>
+                                            </div>
+                                            
+                                            <div class="bg-red-50 rounded-xl p-4 text-center border border-red-200">
+                                                <div class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+                                                    <i class="ri-cake-line text-red-600 text-lg"></i>
+                                                </div>
+                                                <div class="text-lg font-bold text-red-900"><%= Math.round(m.sugar || 0) %></div>
+                                                <div class="text-xs text-red-600">Sugar (g)</div>
+                                            </div>
+                                        </div>
+                  </div>
+                </div>
+            <% }) %>
+          <% } else { %>
+                            <div class="text-center py-16">
+                                <div class="w-20 h-20 bg-gradient-to-br from-teal-100 to-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                    <i class="ri-restaurant-line text-teal-600 text-3xl"></i>
+                                </div>
+                                <h4 class="text-xl font-semibold text-gray-700 mb-3">No meals logged yet</h4>
+                                <p class="text-gray-500 mb-8 max-w-md mx-auto">
+                                    Start tracking your nutrition by uploading a meal photo for AI analysis or adding details manually.
+                                </p>
+                                <div class="flex flex-wrap gap-4 justify-center">
+                                    <div class="flex items-center gap-2 px-4 py-2 bg-teal-50 rounded-lg border border-teal-200">
+                                        <i class="ri-camera-line text-teal-600"></i>
+                                        <span class="text-sm font-medium text-teal-700">Photo Analysis</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-lg border border-blue-200">
+                                        <i class="ri-edit-line text-blue-600"></i>
+                                        <span class="text-sm font-medium text-blue-700">Manual Entry</span>
+                                    </div>
+                                </div>
+                            </div>
+          <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const uploadArea = document.getElementById('uploadArea');
+      const fileInput = document.getElementById('photo');
+      const imagePreview = document.getElementById('imagePreview');
+      const previewImg = document.getElementById('previewImg');
+      const fileInfo = document.getElementById('fileInfo');
+      const removeImage = document.getElementById('removeImage');
+      const uploadProgress = document.getElementById('uploadProgress');
+      const progressBar = document.getElementById('progressBar');
+      const progressText = document.getElementById('progressText');
+      const submitBtn = document.getElementById('submitBtn');
+      const uploadForm = document.getElementById('uploadForm');
+      
+      // File validation constants
+      const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+      const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+      
+      // Drag and drop functionality
+      uploadArea.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+      });
+      
+      uploadArea.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+      });
+      
+      uploadArea.addEventListener('drop', function(e) {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          handleFileSelect(files[0]);
+        }
+      });
+      
+      // Click to upload
+      uploadArea.addEventListener('click', function() {
+        fileInput.click();
+      });
+      
+      // File input change
+      fileInput.addEventListener('change', function(e) {
+        if (e.target.files.length > 0) {
+          handleFileSelect(e.target.files[0]);
+        }
+      });
+      
+      // Remove image
+      removeImage.addEventListener('click', function() {
+        resetUpload();
+      });
+      
+      // Form submission with progress
+      uploadForm.addEventListener('submit', function(e) {
+        if (!fileInput.files[0]) {
+          e.preventDefault();
+          showError('Please select an image first.');
+          return;
+        }
+        
+        showProgress();
+        simulateProgress();
+      });
+      
+      function handleFileSelect(file) {
+        // Validate file
+        const validation = validateFile(file);
+        if (!validation.valid) {
+          showError(validation.message);
+          return;
+        }
+        
+        // Show preview
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          previewImg.src = e.target.result;
+          imagePreview.classList.remove('hidden');
+          uploadArea.classList.add('hidden');
+          
+          // Show file info
+          const sizeInMB = (file.size / (1024 * 1024)).toFixed(2);
+          fileInfo.textContent = `${file.name} (${sizeInMB} MB)`;
+          
+          // Enable submit button
+          submitBtn.disabled = false;
+        };
+        reader.readAsDataURL(file);
+      }
+      
+      function validateFile(file) {
+        if (!file) {
+          return { valid: false, message: 'No file selected.' };
+        }
+        
+        if (!ALLOWED_TYPES.includes(file.type)) {
+          return { valid: false, message: 'Please select a valid image file (JPG, PNG, or WebP).' };
+        }
+        
+        if (file.size > MAX_FILE_SIZE) {
+          return { valid: false, message: 'File size must be less than 10MB.' };
+        }
+        
+        return { valid: true };
+      }
+      
+      function showError(message) {
+        // Remove existing error messages
+        const existingError = document.querySelector('.error-message');
+        if (existingError) {
+          existingError.remove();
+        }
+        
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message';
+        errorDiv.textContent = message;
+        uploadArea.appendChild(errorDiv);
+        
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+          if (errorDiv.parentNode) {
+            errorDiv.remove();
+          }
+        }, 5000);
+      }
+      
+      function showProgress() {
+        uploadProgress.classList.remove('hidden');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="ri-loader-4-line mr-2 animate-spin"></i>Processing...';
+      }
+      
+      function simulateProgress() {
+        let progress = 0;
+        const interval = setInterval(() => {
+          progress += Math.random() * 15;
+          if (progress > 90) progress = 90;
+          
+          progressBar.style.width = progress + '%';
+          
+          if (progress < 30) {
+            progressText.textContent = 'Uploading image...';
+          } else if (progress < 60) {
+            progressText.textContent = 'Analyzing with AI...';
+          } else {
+            progressText.textContent = 'Extracting nutrition data...';
+          }
+          
+          if (progress >= 90) {
+            clearInterval(interval);
+            progressBar.style.width = '100%';
+            progressText.textContent = 'Almost done...';
+          }
+        }, 200);
+      }
+      
+      function resetUpload() {
+        fileInput.value = '';
+        imagePreview.classList.add('hidden');
+        uploadArea.classList.remove('hidden');
+        uploadProgress.classList.add('hidden');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="ri-magic-line mr-2"></i>Analyze & Save Meal';
+        
+        // Remove error messages
+        const existingError = document.querySelector('.error-message');
+        if (existingError) {
+          existingError.remove();
+        }
+      }
+    });
+  </script>
+  
+  <!-- Toast Notification System -->
+  <script src="/js/toast.js"></script>
+  <script src="/js/toast-helpers.js"></script>
+</body>
+</html>

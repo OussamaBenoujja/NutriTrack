@@ -1,24 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NutriTrack - Meals</title>
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="icon" type="image/svg+xml" href="/images/favicon-site.svg">
-    
-    <!-- Remix Icon -->
-    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/style.css">
-    
-  <style>
+<%- include('../partials/head', { title: 'NutriTrack - Meals' }) %>
+    <style>
         @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
         
         body {
@@ -239,47 +222,9 @@
             flex-direction: column;
         }
   </style>
-</head>
+ </head>
 <body class="min-h-screen bg-gray-50">
-    <!-- Navigation Header -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <!-- Logo -->
-                <div class="flex items-center">
-                    <a href="/dashboard" class="flex items-center">
-                        <img src="/images/logo.svg" alt="NutriTrack Logo" class="h-36 w-36">
-                    </a>
-                </div>
-                
-                <!-- Navigation Links -->
-                <div class="hidden lg:flex items-center space-x-2">
-                    <a href="/dashboard" class="nav-link px-4 py-2 rounded-xl text-gray-700 hover:text-teal-600 font-medium flex items-center">
-                        <i class="ri-dashboard-line mr-2 text-lg"></i>Dashboard
-                    </a>
-                    <a href="/meals" class="nav-link px-4 py-2 rounded-xl text-gray-700 hover:text-teal-600 font-medium flex items-center bg-teal-50 text-teal-600">
-                        <i class="ri-restaurant-line mr-2 text-lg"></i>Meals
-                    </a>
-                    <a href="/reports/weekly" class="nav-link px-4 py-2 rounded-xl text-gray-700 hover:text-teal-600 font-medium flex items-center">
-                        <i class="ri-bar-chart-line mr-2 text-lg"></i>Reports
-                    </a>
-                    <a href="/profile" class="nav-link px-4 py-2 rounded-xl text-gray-700 hover:text-teal-600 font-medium flex items-center">
-                        <i class="ri-user-line mr-2 text-lg"></i>Profile
-                    </a>
-                </div>
-                
-                <!-- User Menu -->
-                <div class="flex items-center space-x-4">
-                    <!-- Logout -->
-                    <form action="/auth/logout" method="post" class="inline">
-                        <button type="submit" class="bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2 rounded-xl font-medium transition-all duration-200 flex items-center border border-red-200">
-                            <i class="ri-logout-box-line mr-2"></i>Logout
-                        </button>
-      </form>
-                </div>
-            </div>
-    </nav>
-  </header>
+    <%- include('../partials/navbar', { active: 'meals', user }) %>
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

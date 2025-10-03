@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriTrack - Dashboard</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/svg+xml" href="/images/favicon-site.svg">
+    
+    <!-- Remix Icon -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+    
+  <style>
+        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Manrope', sans-serif;
+            background: #f8fafc;
+        }
+        
+        .btn-primary {
+            background: #009688;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 150, 136, 0.2);
+        }
+        
+        .btn-primary:hover {
+            background: #00786C;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 150, 136, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #38bdf8;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: #0ea5e9;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(56, 189, 248, 0.4);
+        }
+        
+        .btn-warning {
+            background: #f59e0b;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);
+        }
+        
+        .btn-warning:hover {
+            background: #d97706;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.4);
+        }
+        
+        .card {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.95);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border-color: rgba(0, 150, 136, 0.2);
+        }
+        
+        .progress-bar {
+            background: #009688;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(0, 150, 136, 0.3);
+        }
+        
+        .progress-bar.calories {
+            background: #009688;
+            box-shadow: 0 2px 8px rgba(0, 150, 136, 0.3);
+        }
+        
+        .progress-bar.protein {
+            background: #3b82f6;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+        }
+        
+        .progress-bar.carbs {
+            background: #eab308;
+            box-shadow: 0 2px 8px rgba(234, 179, 8, 0.3);
+        }
+        
+        .progress-bar.fats {
+            background: #8b5cf6;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+        }
+        
+        .progress-bar.sodium {
+            background: #f59e0b;
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+        }
+        
+        .progress-bar.sugar {
+            background: #ef4444;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+        }
+        
+        .nav-link {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-link:hover {
+            background: rgba(0, 150, 136, 0.1);
+            color: #009688;
+            transform: translateY(-1px);
+        }
+        
+        
+        
+        .nav-link:hover::after {
+            width: 80%;
+        }
+        
+        .feature-icon {
+            color: #009688;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .gradient-text {
+            color: #009688;
+        }
+        
+        .stats-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            transition: all 0.4s ease;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 150, 136, 0.1);
+        }
+        
+        .nutrition-card {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .recommendation-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+        
+        .recommendation-card:hover {
+            transform: translateX(4px);
+            box-shadow: 0 10px 30px rgba(0, 150, 136, 0.1);
+        }
+        
+        .floating-action {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 50;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.6s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .metric-badge {
+            background: #f0fdfa;
+            border: 1px solid #5eead4;
+            color: #009688;
+        }
+        
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        .status-good { background: #10b981; }
+        .status-warning { background: #f59e0b; }
+        .status-danger { background: #ef4444; }
+        
+        @media (max-width: 768px) {
+            .floating-action {
+                bottom: 1rem;
+                right: 1rem;
+            }
+        }
+  </style>
+</head>
+<body class="min-h-screen bg-gray-50">
+    <!-- Simplified Navigation Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo Only -->
+                <div class="flex items-center">
+                    <a href="/dashboard" class="flex items-center">
+                        <img src="/images/logo.svg" alt="NutriTrack Logo" class="h-36 w-36">
+                    </a>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden lg:flex items-center space-x-2">
+                    <a href="/dashboard" class="nav-link px-4 py-2 rounded-xl text-gray-700 hover:text-teal-600 font-medium flex items-center">
+                        <i class="ri-dashboard-line mr-2 text-lg"></i>Dashboard
+                    </a>
+                    <a href="/meals" class="nav-link px-4 py-2 rounded-xl text-gray-700 hover:text-teal-600 font-medium flex items-center">
+                        <i class="ri-restaurant-line mr-2 text-lg"></i>Meals
+                    </a>
+                    <a href="/reports/weekly" class="nav-link px-4 py-2 rounded-xl text-gray-700 hover:text-teal-600 font-medium flex items-center">
+                        <i class="ri-bar-chart-line mr-2 text-lg"></i>Reports
+                    </a>
+                    <a href="/profile" class="nav-link px-4 py-2 rounded-xl text-gray-700 hover:text-teal-600 font-medium flex items-center">
+                        <i class="ri-user-line mr-2 text-lg"></i>Profile
+                    </a>
+                </div>
+                
+                <!-- User Menu -->
+                <div class="flex items-center space-x-4">
+                    <!-- User Profile -->
+                    <div class="flex hidden items-center space-x-3">
+                        <div class="text-right hidden md:block">
+                            <div class="text-sm font-medium text-gray-800">
+                                <%= (user && user.first_name) ? user.first_name : 'User' %>
+                            </div>
+                        </div>
+                        <div class="w-8 h-8 bg-teal-600 rounded-full flex items-center justify-center text-white font-semibold">
+                            <%= (user && user.first_name) ? user.first_name.charAt(0).toUpperCase() : 'U' %>
+                        </div>
+                    </div>
+                    
+                    <!-- Logout -->
+                    <form action="/auth/logout" method="post" class="inline">
+                        <button type="submit" class="bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2 rounded-xl font-medium transition-all duration-200 flex items-center border border-red-200">
+                            <i class="ri-logout-box-line mr-2"></i>Logout
+                        </button>
+      </form>
+                </div>
+            </div>
+    </nav>
+  </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Enhanced Welcome Section -->
+        <section class="mb-12 slide-in">
+            <!-- Hero Banner -->
+            <div class="relative overflow-hidden rounded-2xl bg-teal-600 p-8 mb-8">
+                <div class="absolute inset-0 bg-black/10"></div>
+                <div class="relative z-10">
+                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+                        <div class="mb-6 lg:mb-0">
+                            <h1 class="text-4xl font-bold text-white mb-3">
+                                Welcome back, <%= (user && user.first_name) ? user.first_name : 'there' %>! 👋
+                            </h1>
+                            <p class="text-teal-100 text-lg mb-4">
+                                Track your nutrition journey and achieve your health goals
+                            </p>
+                            <div class="flex items-center text-teal-200">
+                                <i class="ri-calendar-line mr-2"></i>
+                                <span class="font-mono text-lg"><%= date %></span>
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Stats -->
+                        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="bg-white/20 backdrop-blur-sm rounded-xl p-4 text-center">
+                                <div class="text-2xl font-bold text-white"><%= Math.round(totals?.calories || 0) %></div>
+                                <div class="text-xs text-teal-200">Calories Today</div>
+                            </div>
+                            <div class="bg-white/20 backdrop-blur-sm rounded-xl p-4 text-center">
+                                <div class="text-2xl font-bold text-white"><%= Math.round(totals?.protein || 0) %></div>
+                                <div class="text-xs text-teal-200">Protein (g)</div>
+                            </div>
+                            <div class="bg-white/20 backdrop-blur-sm rounded-xl p-4 text-center">
+                                <div class="text-2xl font-bold text-white">3</div>
+                                <div class="text-xs text-teal-200">Meals Logged</div>
+                            </div>
+                            <div class="bg-white/20 backdrop-blur-sm rounded-xl p-4 text-center">
+                                <div class="text-2xl font-bold text-white">85%</div>
+                                <div class="text-xs text-teal-200">Goal Progress</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Decorative Elements -->
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
+                <div class="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12"></div>
+      </div>
+            
+            <!-- Quick Actions -->
+            <div class="flex flex-wrap gap-4 justify-center lg:justify-start">
+                <a href="/meals" class="btn-primary px-8 py-4 text-white font-semibold rounded-xl flex items-center shadow-lg">
+                    <i class="ri-add-line mr-3 text-xl"></i>Log a Meal
+                </a>
+                <a href="/reports/weekly" class="btn-secondary px-8 py-4 text-white font-semibold rounded-xl flex items-center shadow-lg">
+                    <i class="ri-bar-chart-line mr-3 text-xl"></i>View Reports
+                </a>
+                <form action="/reports/weekly/generate" method="post" class="inline">
+                    <button type="submit" class="btn-warning px-8 py-4 text-white font-semibold rounded-xl flex items-center shadow-lg">
+                        <i class="ri-refresh-line mr-3 text-xl"></i>Generate This Week
+                    </button>
+        </form>
+      </div>
+    </section>
+
+        <!-- Enhanced Dashboard Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <!-- Enhanced Plan Snapshot Card -->
+            <div class="lg:col-span-4">
+                <div class="stats-card rounded-2xl shadow-xl p-8 slide-in">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-teal-600 rounded-xl flex items-center justify-center mr-4 shadow-lg">
+                                <i class="ri-camera-lens-line text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800">Plan Snapshot</h3>
+                                <p class="text-sm text-gray-600">Your nutrition targets</p>
+                            </div>
+                        </div>
+                        <div class="status-indicator status-good"></div>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <!-- Primary Nutrients -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-gradient-to-br from-teal-50 to-teal-100 rounded-xl p-4 border border-teal-200">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="text-xs font-medium text-teal-700 uppercase tracking-wide">Calories</div>
+                                    <i class="ri-fire-line text-teal-600 text-lg"></i>
+                                </div>
+                                <div class="text-2xl font-bold text-teal-900"><%= plan?.target_calories ?? '—' %></div>
+                                <div class="text-xs text-teal-600">kcal daily</div>
+                            </div>
+                            <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 border border-blue-200">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="text-xs font-medium text-blue-700 uppercase tracking-wide">Protein</div>
+                                    <i class="ri-dumbbell-line text-blue-600 text-lg"></i>
+                                </div>
+                                <div class="text-2xl font-bold text-blue-900"><%= plan?.target_proteins ?? '—' %></div>
+                                <div class="text-xs text-blue-600">grams daily</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Secondary Nutrients -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-4 border border-yellow-200">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="text-xs font-medium text-yellow-700 uppercase tracking-wide">Carbs</div>
+                                    <i class="ri-wheat-line text-yellow-600 text-lg"></i>
+                                </div>
+                                <div class="text-2xl font-bold text-yellow-900"><%= plan?.target_carbs ?? '—' %></div>
+                                <div class="text-xs text-yellow-600">grams daily</div>
+                            </div>
+                            <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4 border border-purple-200">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="text-xs font-medium text-purple-700 uppercase tracking-wide">Fats</div>
+                                    <i class="ri-drop-line text-purple-600 text-lg"></i>
+                                </div>
+                                <div class="text-2xl font-bold text-purple-900"><%= plan?.target_fats ?? '—' %></div>
+                                <div class="text-xs text-purple-600">grams daily</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Limits -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-4 border border-orange-200">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="text-xs font-medium text-orange-700 uppercase tracking-wide">Sodium</div>
+                                    <i class="ri-salt-line text-orange-600 text-lg"></i>
+                                </div>
+                                <div class="text-2xl font-bold text-orange-900"><%= plan?.max_sodium ?? '—' %></div>
+                                <div class="text-xs text-orange-600">mg limit</div>
+                            </div>
+                            <div class="bg-gradient-to-br from-red-50 to-red-100 rounded-xl p-4 border border-red-200">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="text-xs font-medium text-red-700 uppercase tracking-wide">Sugar</div>
+                                    <i class="ri-cake-line text-red-600 text-lg"></i>
+                                </div>
+                                <div class="text-2xl font-bold text-red-900"><%= plan?.max_sugar ?? '—' %></div>
+                                <div class="text-xs text-red-600">grams limit</div>
+        </div>
+        </div>
+        </div>
+                    
+                    <div class="flex flex-col gap-3 mt-8">
+                        <form action="/plan/ensure" method="post" class="flex-1">
+            <input type="hidden" name="redirect" value="/dashboard" />
+                            <button type="submit" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-3 rounded-xl font-medium transition-all duration-200 flex items-center justify-center border border-gray-200 hover:border-gray-300">
+                                <i class="ri-refresh-line mr-2"></i>Refresh Plan
+                            </button>
+          </form>
+                        <a href="/profile" class="flex-1 bg-teal-100 hover:bg-teal-200 text-teal-700 px-4 py-3 rounded-xl font-medium transition-all duration-200 flex items-center justify-center border border-teal-300 hover:border-teal-400">
+                            <i class="ri-edit-line mr-2"></i>Edit Profile
+                        </a>
+                    </div>
+                    
+                    <!-- Recommendations Empty State -->
+                    <% if (!Array.isArray(recommendations) || recommendations.length === 0) { %>
+                        <div class="mt-8 p-6 bg-gray-50 rounded-xl border border-gray-200">
+                            <div class="text-center">
+                                <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i class="ri-lightbulb-line text-gray-400 text-xl"></i>
+                                </div>
+                                <h4 class="text-sm font-medium text-gray-600 mb-2">No recommendations yet</h4>
+                                <p class="text-xs text-gray-500 mb-4">Log a meal to get personalized tips and insights.</p>
+                                <a href="/meals" class="btn-primary px-4 py-2 text-white font-semibold rounded-lg inline-flex items-center text-sm">
+                                    <i class="ri-add-line mr-1"></i>Log Your First Meal
+                                </a>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+        </div>
+
+            <!-- Enhanced Today's Intake Card -->
+            <div class="lg:col-span-8">
+                <div class="nutrition-card stats-card rounded-2xl shadow-xl p-8 slide-in">
+                    <div class="flex items-center justify-between mb-8">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mr-4 shadow-lg">
+                                <i class="ri-pie-chart-line text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800">Today's Intake</h3>
+                                <p class="text-sm text-gray-600">Track your daily nutrition progress</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="status-indicator status-good"></div>
+                            <span class="text-sm text-gray-600">On Track</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-8">
+        <!-- Calories -->
+                        <div class="bg-teal-50 rounded-2xl p-6 border border-teal-200">
+                            <div class="flex justify-between items-center mb-4">
+                                <div class="flex items-center">
+                                    <i class="ri-fire-line text-teal-600 text-xl mr-3"></i>
+                                    <span class="text-lg font-semibold text-teal-800">Calories</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-2xl font-bold text-teal-900">
+                                        <%= Math.round(totals?.calories || 0) %>
+                                    </span>
+                                    <span class="text-sm text-teal-600">/ <%= plan?.target_calories ?? '—' %> kcal</span>
+                                </div>
+                            </div>
+                            <div class="w-full bg-teal-200 rounded-full h-4 shadow-inner">
+                                <div class="progress-bar calories h-4 rounded-full" id="bar-cal"></div>
+          </div>
+        </div>
+
+        <!-- Protein -->
+                        <div class="bg-blue-50 rounded-2xl p-6 border border-blue-200">
+                            <div class="flex justify-between items-center mb-4">
+                                <div class="flex items-center">
+                                    <i class="ri-dumbbell-line text-blue-600 text-xl mr-3"></i>
+                                    <span class="text-lg font-semibold text-blue-800">Protein</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-2xl font-bold text-blue-900">
+                                        <%= Math.round(totals?.protein || 0) %>
+                                    </span>
+                                    <span class="text-sm text-blue-600">/ <%= plan?.target_proteins ?? '—' %> g</span>
+                                </div>
+                            </div>
+                            <div class="w-full bg-blue-200 rounded-full h-4 shadow-inner">
+                                <div class="progress-bar protein h-4 rounded-full" id="bar-pro"></div>
+          </div>
+        </div>
+
+        <!-- Carbs -->
+                        <div class="bg-yellow-50 rounded-2xl p-6 border border-yellow-200">
+                            <div class="flex justify-between items-center mb-4">
+                                <div class="flex items-center">
+                                    <i class="ri-wheat-line text-yellow-600 text-xl mr-3"></i>
+                                    <span class="text-lg font-semibold text-yellow-800">Carbs</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-2xl font-bold text-yellow-900">
+                                        <%= Math.round(totals?.carbs || 0) %>
+                                    </span>
+                                    <span class="text-sm text-yellow-600">/ <%= plan?.target_carbs ?? '—' %> g</span>
+                                </div>
+                            </div>
+                            <div class="w-full bg-yellow-200 rounded-full h-4 shadow-inner">
+                                <div class="progress-bar carbs h-4 rounded-full" id="bar-carb"></div>
+          </div>
+        </div>
+
+        <!-- Fats -->
+                        <div class="bg-purple-50 rounded-2xl p-6 border border-purple-200">
+                            <div class="flex justify-between items-center mb-4">
+                                <div class="flex items-center">
+                                    <i class="ri-drop-line text-purple-600 text-xl mr-3"></i>
+                                    <span class="text-lg font-semibold text-purple-800">Fats</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-2xl font-bold text-purple-900">
+                                        <%= Math.round(totals?.fats || 0) %>
+                                    </span>
+                                    <span class="text-sm text-purple-600">/ <%= plan?.target_fats ?? '—' %> g</span>
+                                </div>
+                            </div>
+                            <div class="w-full bg-purple-200 rounded-full h-4 shadow-inner">
+                                <div class="progress-bar fats h-4 rounded-full" id="bar-fat"></div>
+          </div>
+        </div>
+
+        <!-- Sodium -->
+                        <div class="bg-orange-50 rounded-2xl p-6 border border-orange-200">
+                            <div class="flex justify-between items-center mb-4">
+                                <div class="flex items-center">
+                                    <i class="ri-salt-line text-orange-600 text-xl mr-3"></i>
+                                    <span class="text-lg font-semibold text-orange-800">Sodium</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-2xl font-bold text-orange-900">
+                                        <%= Math.round(totals?.sodium || 0) %>
+                                    </span>
+                                    <span class="text-sm text-orange-600">/ <%= plan?.max_sodium ?? '—' %> mg</span>
+                                </div>
+                            </div>
+                            <div class="w-full bg-orange-200 rounded-full h-4 shadow-inner">
+                                <div class="progress-bar sodium h-4 rounded-full" id="bar-sod"></div>
+          </div>
+        </div>
+
+        <!-- Sugar -->
+                        <div class="bg-red-50 rounded-2xl p-6 border border-red-200">
+                            <div class="flex justify-between items-center mb-4">
+                                <div class="flex items-center">
+                                    <i class="ri-cake-line text-red-600 text-xl mr-3"></i>
+                                    <span class="text-lg font-semibold text-red-800">Sugar</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-2xl font-bold text-red-900">
+                                        <%= Math.round(totals?.sugar || 0) %>
+                                    </span>
+                                    <span class="text-sm text-red-600">/ <%= plan?.max_sugar ?? '—' %> g</span>
+                                </div>
+                            </div>
+                            <div class="w-full bg-red-200 rounded-full h-4 shadow-inner">
+                                <div class="progress-bar sugar h-4 rounded-full" id="bar-sug"></div>
+                            </div>
+          </div>
+        </div>
+
+                    <div class="mt-8 p-4 bg-blue-50 rounded-xl border border-blue-200">
+                        <div class="flex items-center">
+                            <i class="ri-information-line text-blue-600 text-xl mr-3"></i>
+                            <p class="text-sm text-blue-800">
+                                Progress bars show your daily intake compared to your personalized nutrition targets.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+          </div>
+        </div>
+
+        <!-- Recommendations Section -->
+          <% if (Array.isArray(recommendations) && recommendations.length) { %>
+        <div class="mt-8">
+            <div class="card bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+                <div class="flex items-center mb-6">
+                    <div class="w-10 h-10 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center mr-3">
+                        <i class="ri-lightbulb-line text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800">Recommendations</h3>
+                        <p class="text-sm text-gray-600">Recent tips and alerts</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+            <% recommendations.forEach(function(r){ %>
+                        <div class="bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg p-4 border border-gray-200">
+                            <div class="flex items-start justify-between">
+                                <div class="flex-1">
+                                    <div class="flex flex-wrap gap-2 mb-3">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800">
+                                            <i class="ri-tag-line mr-1"></i>
+                                            <%= (r.category || 'Tip') %>
+                                        </span>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                            <i class="ri-flag-line mr-1"></i>
+                                            <%= (r.severity || 'normal') %>
+                                        </span>
+                  </div>
+                                    <p class="text-gray-800 mb-2"><%= r.content %></p>
+                  <% if (r.meta_json) { %>
+                                        <div class="text-xs text-gray-500 font-mono bg-gray-200 rounded px-2 py-1 inline-block">
+                                            <%= r.meta_json %>
+                                        </div>
+                  <% } %>
+                </div>
+                <!-- Optional: mark-as-read if such route exists in project
+                                <form action="/recommendations/<%= r.recommendation_id %>/read" method="post" class="ml-4">
+                                    <button type="submit" class="text-gray-400 hover:text-gray-600 transition-colors">
+                                        <i class="ri-check-line"></i>
+                                    </button>
+                </form> -->
+                            </div>
+                        </div>
+            <% }) %>
+                </div>
+            </div>
+        </div>
+          <% } %>
+  </main>
+
+    <!-- Floating Action Button -->
+    <div class="floating-action">
+        <a href="/meals" class="w-16 h-16 bg-teal-600 rounded-full shadow-2xl flex items-center justify-center text-white hover:scale-110 transition-transform duration-300">
+            <i class="ri-add-line text-2xl"></i>
+        </a>
+    </div>
+
+
+  <script>
+    (function(){
+      function pct(val, max){
+        const v = Number(val)||0, m = Number(max)||0;
+        if (m <= 0) return 0;
+        return Math.max(0, Math.min(100, Math.round((v/m)*100)));
+      }
+            
+      // Values from server
+      const totals = {
+        cal: <%= Number(totals?.calories || 0) %>,
+        pro: <%= Number(totals?.protein || 0) %>,
+        carb:<%= Number(totals?.carbs || 0) %>,
+        fat: <%= Number(totals?.fats || 0) %>,
+        sod: <%= Number(totals?.sodium || 0) %>,
+        sug: <%= Number(totals?.sugar || 0) %>
+      };
+      const targets = {
+        cal: <%= Number(plan?.target_calories || 0) %>,
+        pro: <%= Number(plan?.target_proteins || 0) %>,
+        carb:<%= Number(plan?.target_carbs || 0) %>,
+        fat: <%= Number(plan?.target_fats || 0) %>,
+        sod: <%= Number(plan?.max_sodium || 0) %>,
+        sug: <%= Number(plan?.max_sugar || 0) %>
+      };
+            
+            // Set bar widths with animation
+            const progressBars = new Map([
+        ['bar-cal', pct(totals.cal, targets.cal)],
+        ['bar-pro', pct(totals.pro, targets.pro)],
+        ['bar-carb', pct(totals.carb, targets.carb)],
+        ['bar-fat', pct(totals.fat, targets.fat)],
+        ['bar-sod', pct(totals.sod, targets.sod)],
+        ['bar-sug', pct(totals.sug, targets.sug)],
+      ]);
+            
+            // Animate progress bars on load
+            setTimeout(() => {
+                progressBars.forEach((percentage, id) => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.style.width = percentage + '%';
+                    }
+                });
+            }, 100);
+    })();
+  </script>
+  
+  <!-- Toast Notification System -->
+  <script src="/js/toast.js"></script>
+  <script src="/js/toast-helpers.js"></script>
+</body>
+</html>

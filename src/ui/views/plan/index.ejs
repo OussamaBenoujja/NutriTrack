@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NutriTrack · Plan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="/images/favicon-site.svg">
+  <style>
+    :root{--bg:#0f172a;--panel:#111827;--text:#e5e7eb;--accent:#22c55e;--muted:#94a3b8;--card:#0b1220;--shadow:0 10px 24px rgba(0,0,0,.35);--radius:12px;}
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,#0b1220 0%,#0a0f1a 100%);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto;color:var(--text)}
+    header{position:sticky;top:0;z-index:10;background:rgba(15,23,42,.7);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.06)}
+    .nav{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:16px;padding:14px 18px}
+    .brand{font-weight:700}
+    .spacer{flex:1}
+    .nav a, .nav button{color:var(--text);text-decoration:none;background:transparent;border:none;cursor:pointer;padding:8px 12px;border-radius:8px;transition:background .2s}
+    .nav a:hover, .nav button:hover{background:rgba(255,255,255,.06)}
+    main{max-width:800px;margin:24px auto;padding:0 18px}
+    .card{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px}
+    h1{margin-top:0;font-size:24px}
+    .muted{color:var(--muted);margin-bottom:16px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    @media(max-width:600px){.grid{grid-template-columns:1fr}}
+    .kv{display:flex;flex-direction:column;gap:4px}
+    .k{font-size:12px;color:var(--muted)}
+    .v{font-weight:600;font-size:16px}
+    form{margin-top:20px}
+    button{background:var(--accent);color:#041007;border:none;padding:12px 20px;border-radius:8px;cursor:pointer;font-size:14px}
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav">
+      <div class="brand">🍏 NutriTrack</div>
+      <div class="spacer"></div>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/meals">Meals</a>
+      <a href="/reports/weekly">Reports</a>
+      <a href="/profile">Profile</a>
+      <form action="/auth/logout" method="post" style="margin:0">
+        <button type="submit">Logout</button>
+      </form>
+    </nav>
+  </header>
+  <main>
+    <h1>Your Active Plan</h1>
+    <div class="muted">Targets based on your profile</div>
+    <div class="card">
+      <div class="grid">
+        <div class="kv"><span class="k">Calories</span><span class="v"><%= plan?.target_calories ?? '—' %> kcal</span></div>
+        <div class="kv"><span class="k">Protein</span><span class="v"><%= plan?.target_proteins ?? '—' %> g</span></div>
+        <div class="kv"><span class="k">Carbs</span><span class="v"><%= plan?.target_carbs ?? '—' %> g</span></div>
+        <div class="kv"><span class="k">Fats</span><span class="v"><%= plan?.target_fats ?? '—' %> g</span></div>
+        <div class="kv"><span class="k">Max Sodium</span><span class="v"><%= plan?.max_sodium ?? '—' %> mg</span></div>
+        <div class="kv"><span class="k">Max Sugar</span><span class="v"><%= plan?.max_sugar ?? '—' %> g</span></div>
+      </div>
+      <form action="/plan/ensure" method="post">
+        <input type="hidden" name="redirect" value="/plan">
+        <button type="submit">Refresh Plan</button>
+      </form>
+    </div>
+  </main>
+  
+  <!-- Toast Notification System -->
+  <script src="/js/toast.js"></script>
+  <script src="/js/toast-helpers.js"></script>
+  
+  <script>
+      // Handle server-side toast data
+      <% if (typeof toast !== 'undefined' && toast && typeof toastMessage !== 'undefined' && toastMessage) { %>
+          showToastFromData({
+              type: '<%= toast %>',
+              title: '<%= toastTitle || "" %>',
+              message: '<%= toastMessage %>'
+          });
+      <% } %>
+  </script>
+</body>
+</html>

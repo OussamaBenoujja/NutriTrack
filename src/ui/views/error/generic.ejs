@@ -1,0 +1,8 @@
+<%- include('../layouts/error', {
+    title: 'NutriTrack - Error',
+    errorCode: errorCode || 'Error',
+    errorTitle: errorTitle || 'Something went wrong',
+    errorMessage: errorMessage || 'An unexpected error occurred. Please try again or contact support if the problem persists.',
+    icon: icon || 'ri-error-warning-line',
+    debugInfo: debugInfo
+}) %>

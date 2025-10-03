@@ -7,7 +7,7 @@
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="icon" type="image/svg+xml" href="/favicon-site.svg">
+    <link rel="icon" type="image/svg+xml" href="/images/favicon-site.svg">
     
     <!-- Remix Icon -->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
@@ -15,22 +15,8 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'persian-green': '#009688',
-                        'persian-green-light': '#4CB5AB',
-                        'persian-green-dark': '#00786C',
-                    },
-                    fontFamily: {
-                        'manrope': ['Manrope', 'system-ui', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
@@ -48,6 +34,10 @@
             outline: none;
             border-color: #009688;
             box-shadow: 0 0 0 3px rgba(0, 150, 136, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
         }
         
         .btn-primary {
@@ -115,7 +105,11 @@
                 </div>
                 
                 <!-- Main Content Area -->
-                <%- body %>
+                <% if (typeof body !== 'undefined' && body) { %>
+                    <%- include('../' + body) %>
+                <% } else { %>
+                    <%- body %>
+                <% } %>
                 
                 
             </div>
@@ -157,7 +151,20 @@
         </div>
     </div>
     
+    <!-- Toast Notification System -->
+    <script src="/js/toast.js"></script>
+    <script src="/js/toast-helpers.js"></script>
+    
     <script>
+        // Handle server-side toast data
+        <% if (typeof toast !== 'undefined' && toast && typeof toastMessage !== 'undefined' && toastMessage) { %>
+            showToastFromData({
+                type: '<%= toast %>',
+                title: '<%= toastTitle || "" %>',
+                message: '<%= toastMessage %>'
+            });
+        <% } %>
+        
         function togglePassword(inputId = 'password') {
             const passwordInput = document.getElementById(inputId);
             const toggleIcon = passwordInput.parentElement.querySelector('.password-toggle');

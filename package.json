@@ -4,6 +4,8 @@
   "description": "this is an application to track diet and calories using VLMs by processing food intake routine and diet ",
   "main": "index.js",
   "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
     "test": "node test.js"
   },
   "repository": {
@@ -24,10 +26,13 @@
   "dependencies": {
     "@langchain/google-genai": "^0.2.18",
     "bcrypt": "^6.0.0",
+    "body-parser": "^2.2.0",
     "dotenv": "^17.2.2",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "express-session": "^1.18.2",
-    "mysql2": "^3.15.0"
+    "multer": "^2.0.2",
+    "mysql2": "^3.15.0",
+    "sharp": "^0.33.0"
   }
 }

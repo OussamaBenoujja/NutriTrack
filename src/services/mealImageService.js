@@ -3,6 +3,7 @@ const path = require('path');
 const crud = require('../persistence/crud');
 const planService = require('./planService');
 const { ChatGoogleGenerativeAI } = require('@langchain/google-genai');
+const imageOptimization = require('./imageOptimizationService');
 
 function getMimeType(p) {
   const ext = path.extname(p).toLowerCase();
@@ -18,18 +19,45 @@ function toNumber(x) {
 }
 
 async function analyzeMealImage(userId, imagePath) {
+
+  console.log('image analysis started!!');
+
   if (!userId) throw new Error('missing userId');
   if (!imagePath) throw new Error('missing imagePath');
 
   const user = await crud.getUserById(userId);
   if (!user) throw new Error('user not found');
 
+  // Validate and optimize the image
+  console.log('Validating image...');
+  const validation = await imageOptimization.validateImage(imagePath);
+  if (!validation.valid) {
+    throw new Error(`Image validation failed: ${validation.error}`);
+  }
+
+  // Create optimized version
+  const optimizedPath = imagePath.replace(/(\.[^.]+)$/, '_optimized$1');
+  console.log('Optimizing image...');
+  const optimization = await imageOptimization.optimizeImage(imagePath, optimizedPath, {
+    maxWidth: 1920,
+    maxHeight: 1080,
+    quality: 85
+  });
+
+  if (!optimization.success) {
+    console.warn('Image optimization failed, using original:', optimization.error);
+  } else {
+    console.log(`Image optimized: ${optimization.compressionRatio}% size reduction`);
+    // Use optimized image for analysis
+    imagePath = optimizedPath;
+  }
+
   const bytes = fs.readFileSync(imagePath);
   const b64 = Buffer.from(bytes).toString('base64');
   const mime = getMimeType(imagePath);
 
   const model = new ChatGoogleGenerativeAI({
-    model: 'gemini-1.5-flash',
+    model: 'gemini-2.0-flash',
     apiKey: process.env.GOOGLE_API_KEY,
   });
 
@@ -47,7 +75,7 @@ async function analyzeMealImage(userId, imagePath) {
     {
       role: 'user',
       content: [
-        { type: 'text', text: `Identify foods and estimate nutrients for this user profile: ${JSON.stringify(profileInfo)}. Return ONLY JSON matching this shape: ${schemaHint}` },
+        { type: 'text', text: `Identify foods and estimate nutrients for this user profile: ${JSON.stringify(profileInfo)}. Return ONLY JSON matching this shape and also make sure not to add  backticks pure output directly NO : ${schemaHint}` },
         { type: 'media', mimeType: mime, data: b64 },
       ],
     },
@@ -62,9 +90,12 @@ async function analyzeMealImage(userId, imagePath) {
     text = String(res.content || '');
   }
 
+  console.log(text);
+  let clean = text.replace(/```json|```/g, '').trim();
+  console.log(clean);
   let parsed;
   try {
-    parsed = JSON.parse(text);
+    parsed = JSON.parse(clean);
   } catch {
     parsed = { items: [], totals: {} };
   }
@@ -97,8 +128,18 @@ async function analyzeMealImage(userId, imagePath) {
     analysis_json: JSON.stringify(parsed),
   });
 
-  const evalRes = await planService.evaluateDayAndRecommend(userId, ymd);
+  // Clean up temporary optimized file if it exists
+  if (optimization.success && fs.existsSync(optimizedPath)) {
+    try {
+      fs.unlinkSync(optimizedPath);
+      console.log('Cleaned up temporary optimized file');
+    } catch (cleanupError) {
+      console.warn('Failed to clean up temporary file:', cleanupError.message);
+    }
+  }
 
+  const evalRes = await planService.evaluateDayAndRecommend(userId, ymd);
+  console.log({ meal_id: mealId, totals, recommendations_created: evalRes.recommendations_created });
   return { meal_id: mealId, totals, recommendations_created: evalRes.recommendations_created };
 }
 

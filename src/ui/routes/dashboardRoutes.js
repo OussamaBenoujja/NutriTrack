@@ -40,13 +40,12 @@ router.get('/dashboard', requireAuth, async (req, res) => {
 
     const totals = sumMeals(meals);
 
-    
     res.render('dashboard/index', {
       user,
       plan,
       date: ymd,
       totals,
-      recommendations: recs || [],
+      recommendations: recs || []
     });
   } catch (e) {
     console.error(e);

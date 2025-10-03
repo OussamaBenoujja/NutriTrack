@@ -14,9 +14,16 @@ router.get('/profile', requireAuth, async (req, res) => {
   try {
     const user = await crud.getUserById(req.session.user_id);
     if (!user) return res.redirect('/auth/login');
-    res.render('profile/index', { user, message: null });
+    
+    res.render('profile/index', { 
+      user, 
+      message: null
+    });
   } catch (e) {
-    res.status(500).render('profile/index', { user: null, message: 'Failed to load profile' });
+    res.status(500).render('profile/index', { 
+      user: null, 
+      message: 'Failed to load profile'
+    });
   }
 });
 
@@ -37,9 +44,9 @@ router.post('/profile', requireAuth, async (req, res) => {
     await crud.updateUser(userId, data);
     
     await planService.getOrCreateActivePlan(userId);
-    res.redirect('/profile');
+    res.redirect('/profile?toast=success&toastTitle=Profile Updated&toastMessage=Your profile has been updated successfully!');
   } catch (e) {
-    res.status(500).send('Failed to update profile');
+    res.redirect('/profile?toast=error&toastTitle=Update Failed&toastMessage=Failed to update profile. Please try again.');
   }
 });
 

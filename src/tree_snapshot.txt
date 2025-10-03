@@ -11,20 +11,46 @@ C:\USERS\OUSSA\DESKTOP\NUTRITRACK\SRC
 |   \---queries
 |           db.sql
 |           
++---pest
 +---services
 |       authService.js
-|       mealService.js
+|       coreServices.js
+|       mealImageService.js
+|       planService.js
 |       recommendationService.js
-|       reportService.js
+|       weeklyReportService.js
 |       
-\---ui
-    +---public
-    |       .gitkeep
-    |       
-    +---routes
-    |       .gitkeep
-    |       authRoutes.js
-    |       
-    \---views
-            .gitkeep
-            
++---ui
+|   +---public
+|   |       .gitkeep
+|   |       
+|   +---routes
+|   |       .gitkeep
+|   |       authRoutes.js
+|   |       dashboardRoutes.js
+|   |       mealsRoutes.js
+|   |       planRoutes.js
+|   |       profileRoutes.js
+|   |       reportsRoutes.js
+|   |       
+|   \---views
+|       |   .gitkeep
+|       |   404.ejs
+|       |   
+|       +---auth
+|       |       login.ejs
+|       |       signup.ejs
+|       |       
+|       +---dashboard
+|       |       index.ejs
+|       |       
+|       +---meals
+|       |       meals.ejs
+|       |       
+|       +---profile
+|       |       index.ejs
+|       |       
+|       \---reports
+|               weekly.ejs
+|               
+\---uploads

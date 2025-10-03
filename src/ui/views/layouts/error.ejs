@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title || 'NutriTrack - Error' %></title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/svg+xml" href="/images/favicon-site.svg">
+    
+    <!-- Remix Icon -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Manrope', sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .error-container {
+            background: #ffffff;
+            width: 100%;
+            max-width: none;
+        }
+        
+        .error-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .error-code {
+            background: linear-gradient(135deg, #009688 0%, #00786C 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #009688 0%, #00786C 100%);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 150, 136, 0.2);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 150, 136, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #f8fafc;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: #e2e8f0;
+            color: #475569;
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center">
+    <div class="error-container p-8 md:p-12 w-full text-center">
+       
+        
+        <!-- Error Code -->
+        <div class="error-code text-6xl md:text-8xl font-bold mb-4">
+            <%= errorCode || '404' %>
+        </div>
+        
+        <!-- Error Title -->
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+            <%= errorTitle || 'Oops! Something went wrong' %>
+        </h1>
+        
+        <!-- Error Message -->
+        <p class="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+            <%= errorMessage || 'The page you\'re looking for doesn\'t exist or has been moved.' %>
+        </p>
+        
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="/dashboard" class="btn-primary px-8 py-3 rounded-lg text-white font-semibold inline-flex items-center justify-center">
+                <i class="ri-home-line mr-2"></i>
+                Go to Dashboard
+            </a>
+            <button onclick="history.back()" class="btn-secondary px-8 py-3 rounded-lg font-semibold inline-flex items-center justify-center">
+                <i class="ri-arrow-left-line mr-2"></i>
+                Go Back
+            </button>
+        </div>
+        
+        <!-- Debug Information (only in development) -->
+        <% if (typeof process !== 'undefined' && process.env.NODE_ENV === 'development' && typeof debugInfo !== 'undefined' && debugInfo) { %>
+        <details class="mt-8 text-left">
+            <summary class="cursor-pointer text-sm text-gray-500 hover:text-gray-700">
+                <i class="ri-bug-line mr-1"></i>
+                Debug Information (Development Only)
+            </summary>
+            <div class="mt-4 p-4 bg-gray-100 rounded-lg">
+                <pre class="text-xs text-gray-600 overflow-auto"><%= debugInfo %></pre>
+            </div>
+        </details>
+        <% } %>
+    </div>
+    
+    <!-- Toast Notification System -->
+    <script src="/js/toast.js"></script>
+    <script src="/js/toast-helpers.js"></script>
+    
+    <script>
+        // Handle URL parameters for error-specific toasts
+        const urlParams = new URLSearchParams(window.location.search);
+        const errorToast = urlParams.get('errorToast');
+        const errorToastMessage = urlParams.get('errorToastMessage');
+        
+        if (errorToast && errorToastMessage) {
+            showToastFromURL();
+        }
+        
+        // Auto-refresh suggestion for certain errors
+        if (window.location.pathname.includes('500') || window.location.pathname.includes('503')) {
+            setTimeout(() => {
+                showInfoToast('Suggestion', 'This might be a temporary issue. Try refreshing the page in a few moments.');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

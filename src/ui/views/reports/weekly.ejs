@@ -1,75 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NutriTrack - Weekly Reports</title>
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="icon" type="image/svg+xml" href="/images/favicon-site.svg">
-    
-    <!-- Remix Icon -->
-    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/style.css">
-    
-  <style>
+<%- include('../partials/head', { title: 'NutriTrack - Weekly Reports', extraHead: '<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>' }) %>
+<style>
         @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
         
         body {
             font-family: 'Manrope', sans-serif;
             background: #f8fafc;
         }
-        
-        .btn-primary {
-            background: #009688;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 150, 136, 0.2);
-        }
-        
-        .btn-primary:hover {
-            background: #00786C;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 150, 136, 0.4);
-        }
-        
-        .btn-secondary {
-            background: #38bdf8;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.2);
-        }
-        
-        .btn-secondary:hover {
-            background: #0ea5e9;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(56, 189, 248, 0.4);
-        }
-        
-        .card {
-            backdrop-filter: blur(20px);
-            background: rgba(255, 255, 255, 0.95);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-            border-color: rgba(0, 150, 136, 0.2);
-        }
-        
-        .nav-link {
-            transition: all 0.3s ease;
-            position: relative;
-        }
+        /* existing styles continue */
         
         .nav-link:hover {
             background: rgba(0, 150, 136, 0.1);
@@ -180,51 +119,8 @@
         }
         
   </style>
-</head>
 <body class="min-h-screen bg-gray-50">
-    <!-- Navigation Header -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <!-- Logo -->
-                <div class="flex items-center">
-                    <a href="/dashboard" class="flex items-center">
-                        <img src="/images/logo.svg" alt="NutriTrack Logo" class="h-36 w-36">
-                    </a>
-                </div>
-                
-                <!-- Navigation Links -->
-                <div class="hidden lg:flex items-center space-x-2">
-                    <a href="/dashboard" class="nav-link px-4 py-2 rounded-xl text-gray-700 hover:text-teal-600 font-medium flex items-center">
-                        <i class="ri-dashboard-line mr-2 text-lg"></i>Dashboard
-                    </a>
-                    <a href="/meals" class="nav-link px-4 py-2 rounded-xl text-gray-700 hover:text-teal-600 font-medium flex items-center">
-                        <i class="ri-restaurant-line mr-2 text-lg"></i>Meals
-                    </a>
-                    <a href="/reports/weekly" class="nav-link px-4 py-2 rounded-xl text-gray-700 hover:text-teal-600 font-medium flex items-center bg-teal-50 text-teal-600">
-                        <i class="ri-bar-chart-line mr-2 text-lg"></i>Reports
-                    </a>
-                    <a href="/profile" class="nav-link px-4 py-2 rounded-xl text-gray-700 hover:text-teal-600 font-medium flex items-center">
-                        <i class="ri-user-line mr-2 text-lg"></i>Profile
-                    </a>
-                </div>
-                
-                <!-- User Menu -->
-                <div class="flex items-center space-x-4">
-                    <!-- User Profile -->
-                    
-                    
-                    <!-- Logout -->
-                    <form action="/auth/logout" method="post" class="inline">
-                        <button type="submit" class="bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2 rounded-xl font-medium transition-all duration-200 flex items-center border border-red-200">
-                            <i class="ri-logout-box-line mr-2"></i>Logout
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </nav>
-    </header>
-
+    <%- include('../partials/navbar', { active: 'reports', user }) %>
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Hero Section -->
@@ -332,15 +228,13 @@
                                 </div>
                             </div>
                 
-                <% if (r.summary_json) { %>
-                  <% 
-                    let summary;
-                    try {
-                      summary = JSON.parse(r.summary_json);
-                    } catch(e) {
-                      summary = {};
-                    }
-                  %>
+                                <% if (r.summary_json || r._summary_object) { %>
+                                    <% 
+                                        let summary = r._summary_object;
+                                        if (!summary) {
+                                            try { summary = JSON.parse(r.summary_json); } catch(e) { summary = {}; }
+                                        }
+                                    %>
                                 
                                 <!-- Metrics Grid -->
                                 <div class="p-6">
@@ -357,7 +251,7 @@
                                             <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-2">
                                                 <i class="ri-dumbbell-line text-blue-600 text-lg"></i>
                                             </div>
-                                            <div class="text-lg font-bold text-blue-900"><%= Math.round(summary.avg_protein || 0) %>g</div>
+                                            <div class="text-lg font-bold text-blue-900"><%= Math.round(summary.avg_protein || summary.avg_proteins || 0) %>g</div>
                                             <div class="text-xs text-blue-600">Avg Protein</div>
                                         </div>
                                         
@@ -397,21 +291,16 @@
                                     </div>
                                 </div>
                                 
-                                <!-- Chart Container -->
+                                <!-- Chart Data + Container (refactored) -->
+                                <div class="chart-data hidden"
+                                     data-week="<%= r.week_start_ymd %>"
+                                     data-calories="<%= Math.round(summary.avg_calories || 0) %>"
+                                     data-protein="<%= Math.round(summary.avg_protein || 0) %>"
+                                     data-carbs="<%= Math.round(summary.avg_carbs || 0) %>"
+                                     data-fats="<%= Math.round(summary.avg_fats || 0) %>"></div>
                                 <div id="chart-<%= index %>" class="chart-container hidden">
                                     <canvas id="nutritionChart-<%= index %>"></canvas>
                                 </div>
-                                
-                                <!-- Chart Data (Hidden) -->
-                                <script>
-                                    window.chartData<%= index %> = {
-                                        calories: <%= Math.round(summary.avg_calories || 0) %>,
-                                        protein: <%= Math.round(summary.avg_protein || 0) %>,
-                                        carbs: <%= Math.round(summary.avg_carbs || 0) %>,
-                                        fats: <%= Math.round(summary.avg_fats || 0) %>,
-                                        week: '<%= r.week_start_ymd %>'
-                                    };
-                                </script>
                                 
                             <% } else { %>
                                 <div class="text-center py-8 text-gray-500">

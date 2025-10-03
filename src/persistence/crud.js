@@ -232,5 +232,23 @@ crud.getWeeklyReportsByUserId = async (userId) => {
     return rows;
 };
 
+crud.getWeeklyReportByUserIdAndStartDate = async (userId, weekStartDate) => {
+  const sql = `SELECT * FROM weekly_reports WHERE user_id = ? AND week_start_date = ? LIMIT 1`;
+  const [rows] = await pool.query(sql, [userId, weekStartDate]);
+  return rows[0] || null;
+};
+
+crud.updateWeeklyReport = async (reportId, data) => {
+  const sql = `UPDATE weekly_reports SET nutritional_summary = ?, weight_evolution = ?, performance_notes = ? WHERE report_id = ?`;
+  const values = [
+    data.nutritional_summary ?? null,
+    data.weight_evolution ?? null,
+    data.performance_notes ?? null,
+    reportId
+  ];
+  const [res] = await pool.query(sql, values);
+  return res.affectedRows;
+};
+
 
 module.exports = crud;
